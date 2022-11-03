@@ -29,6 +29,11 @@ from ._cache import _cache_manager, _CacheInfo, _check_for_cached_results
 
 _logger: logging.Logger = logging.getLogger(__name__)
 
+try:
+    import geopandas as gpd # noqa
+except ImportError:
+    pass
+
 
 def _extract_ctas_manifest_paths(path: str, boto3_session: Optional[boto3.Session] = None) -> List[str]:
     """Get the list of paths of the generated files."""
@@ -1286,4 +1291,103 @@ def unload(
         kms_key=kms_key,
         boto3_session=session,
         data_source=data_source,
+    )
+
+
+@apply_configs
+def read_sql_gis_query(
+    sql: str,
+    database: str,
+    ctas_approach: bool = True,
+    unload_approach: bool = False,
+    unload_parameters: Optional[Dict[str, Any]] = None,
+    categories: Optional[List[str]] = None,
+    chunksize: Optional[Union[int, bool]] = None,
+    s3_output: Optional[str] = None,
+    workgroup: Optional[str] = None,
+    encryption: Optional[str] = None,
+    kms_key: Optional[str] = None,
+    keep_files: bool = True,
+    ctas_database_name: Optional[str] = None,
+    ctas_temp_table_name: Optional[str] = None,
+    ctas_bucketing_info: Optional[Tuple[List[str], int]] = None,
+    use_threads: Union[bool, int] = True,
+    boto3_session: Optional[boto3.Session] = None,
+    max_cache_seconds: int = 0,
+    max_cache_query_inspections: int = 50,
+    max_remote_cache_entries: int = 50,
+    max_local_cache_entries: int = 100,
+    data_source: Optional[str] = None,
+    params: Optional[Dict[str, Any]] = None,
+    s3_additional_kwargs: Optional[Dict[str, Any]] = None,
+    pyarrow_additional_kwargs: Optional[Dict[str, Any]] = None,
+) -> Union[gpd.GeoDataFrame, Iterator[gpd.GeoDataFrame]]:
+
+    if ctas_approach and data_source not in (None, "AwsDataCatalog"):
+        raise exceptions.InvalidArgumentCombination(
+            "Queries with ctas_approach=True (default) does not support "
+            "data_source values different than None and 'AwsDataCatalog'. "
+            "Please check the related tutorial for more details "
+            "(https://github.com/aws/aws-sdk-pandas/blob/main/"
+            "tutorials/006%20-%20Amazon%20Athena.ipynb)"
+        )
+    if ctas_approach and unload_approach:
+        raise exceptions.InvalidArgumentCombination("Only one of ctas_approach=True or unload_approach=True is allowed")
+    if unload_parameters and unload_parameters.get("file_format") not in (None, "PARQUET"):
+        raise exceptions.InvalidArgumentCombination("Only PARQUET file format is supported if unload_approach=True")
+    chunksize = sys.maxsize if ctas_approach is False and chunksize is True else chunksize
+    session: boto3.Session = _utils.ensure_session(session=boto3_session)
+    if params is None:
+        params = {}
+    for key, value in params.items():
+        sql = sql.replace(f":{key};", str(value))
+
+    max_remote_cache_entries = min(max_remote_cache_entries, max_local_cache_entries)
+
+    _cache_manager.max_cache_size = max_local_cache_entries
+    cache_info: _CacheInfo = _check_for_cached_results(
+        sql=sql,
+        boto3_session=session,
+        workgroup=workgroup,
+        max_cache_seconds=max_cache_seconds,
+        max_cache_query_inspections=max_cache_query_inspections,
+        max_remote_cache_entries=max_remote_cache_entries,
+    )
+    _logger.debug("cache_info:\n%s", cache_info)
+    if cache_info.has_valid_cache is True:
+        _logger.debug("Valid cache found. Retrieving...")
+        try:
+            return _resolve_query_with_cache(
+                cache_info=cache_info,
+                categories=categories,
+                chunksize=chunksize,
+                use_threads=use_threads,
+                session=session,
+                s3_additional_kwargs=s3_additional_kwargs,
+                pyarrow_additional_kwargs=pyarrow_additional_kwargs,
+            )
+        except Exception as e:  # pylint: disable=broad-except
+            _logger.error(e)  # if there is anything wrong with the cache, just fallback to the usual path
+            _logger.debug("Corrupted cache. Continuing to execute query...")
+    return _resolve_query_without_cache(
+        sql=sql,
+        database=database,
+        data_source=data_source,
+        ctas_approach=ctas_approach,
+        unload_approach=unload_approach,
+        unload_parameters=unload_parameters,
+        categories=categories,
+        chunksize=chunksize,
+        s3_output=s3_output,
+        workgroup=workgroup,
+        encryption=encryption,
+        kms_key=kms_key,
+        keep_files=keep_files,
+        ctas_database_name=ctas_database_name,
+        ctas_temp_table_name=ctas_temp_table_name,
+        ctas_bucketing_info=ctas_bucketing_info,
+        use_threads=use_threads,
+        s3_additional_kwargs=s3_additional_kwargs,
+        boto3_session=session,
+        pyarrow_additional_kwargs=pyarrow_additional_kwargs,
     )
