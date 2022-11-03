@@ -11,7 +11,7 @@ Easy integration with Athena, Glue, Redshift, Timestream, OpenSearch, Neptune, Q
 
 > An [AWS Professional Service](https://aws.amazon.com/professional-services/) open source initiative | aws-proserve-opensource@amazon.com
 
-[![Release](https://img.shields.io/badge/release-2.16.1-brightgreen.svg)](https://pypi.org/project/awswrangler/)
+[![Release](https://img.shields.io/badge/release-2.17.0-brightgreen.svg)](https://pypi.org/project/awswrangler/)
 [![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-brightgreen.svg)](https://anaconda.org/conda-forge/awswrangler)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -26,7 +26,7 @@ Easy integration with Athena, Glue, Redshift, Timestream, OpenSearch, Neptune, Q
 | **[PyPi](https://pypi.org/project/awswrangler/)**  | [![PyPI Downloads](https://pepy.tech/badge/awswrangler)](https://pypi.org/project/awswrangler/) | `pip install awswrangler` |
 | **[Conda](https://anaconda.org/conda-forge/awswrangler)** | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/awswrangler.svg)](https://anaconda.org/conda-forge/awswrangler) | `conda install -c conda-forge awswrangler` |
 
-> ⚠️ **For platforms without PyArrow 3 support (e.g. [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#emr-cluster), [Glue PySpark Job](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#aws-glue-pyspark-jobs), MWAA):**<br>
+> ⚠️ **For platforms without PyArrow 3 support (e.g. [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#emr-cluster), [Glue PySpark Job](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#aws-glue-pyspark-jobs), MWAA):**<br>
 ➡️ `pip install pyarrow==2 awswrangler`
 
 Powered By [<img src="https://arrow.apache.org/img/arrow.png" width="200">](https://arrow.apache.org/powered_by/)
@@ -44,7 +44,7 @@ Powered By [<img src="https://arrow.apache.org/img/arrow.png" width="200">](http
 
 Installation command: `pip install awswrangler`
 
-> ⚠️ **For platforms without PyArrow 3 support (e.g. [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#emr-cluster), [Glue PySpark Job](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#aws-glue-pyspark-jobs), MWAA):**<br>
+> ⚠️ **For platforms without PyArrow 3 support (e.g. [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#emr-cluster), [Glue PySpark Job](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#aws-glue-pyspark-jobs), MWAA):**<br>
 ➡️`pip install pyarrow==2 awswrangler`
 
 ```py3
@@ -98,17 +98,17 @@ FROM "sampleDB"."sampleTable" ORDER BY time DESC LIMIT 3
 
 ## [Read The Docs](https://aws-sdk-pandas.readthedocs.io/)
 
-- [**What is AWS SDK for pandas?**](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/what.html)
-- [**Install**](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html)
-  - [PyPi (pip)](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#pypi-pip)
-  - [Conda](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#conda)
-  - [AWS Lambda Layer](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#aws-lambda-layer)
-  - [AWS Glue Python Shell Jobs](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#aws-glue-python-shell-jobs)
-  - [AWS Glue PySpark Jobs](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#aws-glue-pyspark-jobs)
-  - [Amazon SageMaker Notebook](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#amazon-sagemaker-notebook)
-  - [Amazon SageMaker Notebook Lifecycle](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#amazon-sagemaker-notebook-lifecycle)
-  - [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#emr)
-  - [From source](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/install.html#from-source)
+- [**What is AWS SDK for pandas?**](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/about.html)
+- [**Install**](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html)
+  - [PyPi (pip)](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#pypi-pip)
+  - [Conda](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#conda)
+  - [AWS Lambda Layer](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#aws-lambda-layer)
+  - [AWS Glue Python Shell Jobs](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#aws-glue-python-shell-jobs)
+  - [AWS Glue PySpark Jobs](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#aws-glue-pyspark-jobs)
+  - [Amazon SageMaker Notebook](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#amazon-sagemaker-notebook)
+  - [Amazon SageMaker Notebook Lifecycle](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#amazon-sagemaker-notebook-lifecycle)
+  - [EMR](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#emr)
+  - [From source](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/install.html#from-source)
 - [**Tutorials**](https://github.com/aws/aws-sdk-pandas/tree/main/tutorials)
   - [001 - Introduction](https://github.com/aws/aws-sdk-pandas/blob/main/tutorials/001%20-%20Introduction.ipynb)
   - [002 - Sessions](https://github.com/aws/aws-sdk-pandas/blob/main/tutorials/002%20-%20Sessions.ipynb)
@@ -143,29 +143,29 @@ FROM "sampleDB"."sampleTable" ORDER BY time DESC LIMIT 3
   - [031 - OpenSearch](https://github.com/aws/aws-sdk-pandas/blob/main/tutorials/031%20-%20OpenSearch.ipynb)
   - [032 - Lake Formation Governed Tables](https://github.com/aws/aws-sdk-pandas/blob/main/tutorials/032%20-%20Lake%20Formation%20Governed%20Tables.ipynb)
   - [033 - Amazon Neptune](https://github.com/aws/aws-sdk-pandas/blob/main/tutorials/033%20-%20Amazon%20Neptune.ipynb)
-- [**API Reference**](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html)
-  - [Amazon S3](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-s3)
-  - [AWS Glue Catalog](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#aws-glue-catalog)
-  - [Amazon Athena](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-athena)
-  - [AWS Lake Formation](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#aws-lake-formation)
-  - [Amazon Redshift](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-redshift)
-  - [PostgreSQL](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#postgresql)
-  - [MySQL](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#mysql)
-  - [SQL Server](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#sqlserver)
-  - [Oracle](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#oracle)
-  - [Data API Redshift](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#data-api-redshift)
-  - [Data API RDS](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#data-api-rds)
-  - [OpenSearch](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#opensearch)
-  - [Amazon Neptune](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-neptune)
-  - [DynamoDB](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#dynamodb)
-  - [Amazon Timestream](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-timestream)
-  - [Amazon EMR](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-emr)
-  - [Amazon CloudWatch Logs](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-cloudwatch-logs)
-  - [Amazon Chime](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-chime)
-  - [Amazon QuickSight](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#amazon-quicksight)
-  - [AWS STS](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#aws-sts)
-  - [AWS Secrets Manager](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#aws-secrets-manager)
-  - [Global Configurations](https://aws-sdk-pandas.readthedocs.io/en/2.16.1/api.html#global-configurations)
+- [**API Reference**](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html)
+  - [Amazon S3](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-s3)
+  - [AWS Glue Catalog](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#aws-glue-catalog)
+  - [Amazon Athena](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-athena)
+  - [AWS Lake Formation](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#aws-lake-formation)
+  - [Amazon Redshift](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-redshift)
+  - [PostgreSQL](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#postgresql)
+  - [MySQL](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#mysql)
+  - [SQL Server](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#sqlserver)
+  - [Oracle](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#oracle)
+  - [Data API Redshift](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#data-api-redshift)
+  - [Data API RDS](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#data-api-rds)
+  - [OpenSearch](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#opensearch)
+  - [Amazon Neptune](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-neptune)
+  - [DynamoDB](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#dynamodb)
+  - [Amazon Timestream](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-timestream)
+  - [Amazon EMR](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-emr)
+  - [Amazon CloudWatch Logs](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-cloudwatch-logs)
+  - [Amazon Chime](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-chime)
+  - [Amazon QuickSight](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#amazon-quicksight)
+  - [AWS STS](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#aws-sts)
+  - [AWS Secrets Manager](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#aws-secrets-manager)
+  - [Global Configurations](https://aws-sdk-pandas.readthedocs.io/en/2.17.0/api.html#global-configurations)
 - [**License**](https://github.com/aws/aws-sdk-pandas/blob/main/LICENSE.txt)
 - [**Contributing**](https://github.com/aws/aws-sdk-pandas/blob/main/CONTRIBUTING.md)
 
@@ -181,9 +181,9 @@ You may also find help on these community resources:
 
 Please [send a Pull Request](https://github.com/aws/aws-sdk-pandas/edit/main/README.md) with your resource reference and @githubhandle.
 
-- [Optimize Python ETL by extending Pandas with AWS SDK for pandas](https://aws.amazon.com/blogs/big-data/optimize-python-etl-by-extending-pandas-with-aws-sdk-pandas/) [[@igorborgest](https://github.com/igorborgest)]
+- [Optimize Python ETL by extending Pandas with AWS SDK for pandas](https://aws.amazon.com/blogs/big-data/optimize-python-etl-by-extending-pandas-with-aws-data-wrangler/) [[@igorborgest](https://github.com/igorborgest)]
 - [Reading Parquet Files With AWS Lambda](https://aprakash.wordpress.com/2020/04/14/reading-parquet-files-with-aws-lambda/) [[@anand086](https://github.com/anand086)]
-- [Transform AWS CloudTrail data using AWS SDK for pandas](https://aprakash.wordpress.com/2020/09/17/transform-aws-cloudtrail-data-using-aws-sdk-pandas/) [[@anand086](https://github.com/anand086)]
+- [Transform AWS CloudTrail data using AWS SDK for pandas](https://aprakash.wordpress.com/2020/09/17/transform-aws-cloudtrail-data-using-aws-data-wrangler/) [[@anand086](https://github.com/anand086)]
 - [Rename Glue Tables using AWS SDK for pandas](https://ananddatastories.com/rename-glue-tables-using-aws-sdk-pandas/) [[@anand086](https://github.com/anand086)]
 - [Getting started on AWS SDK for pandas and Athena](https://medium.com/@dheerajsharmainampudi/getting-started-on-aws-sdk-pandas-and-athena-7b446c834076) [[@dheerajsharma21](https://github.com/dheerajsharma21)]
 - [Simplifying Pandas integration with AWS data related services](https://medium.com/@bv_subhash/aws-sdk-pandas-simplifying-pandas-integration-with-aws-data-related-services-2b3325c12188) [[@bvsubhash](https://github.com/bvsubhash)]
@@ -220,6 +220,7 @@ If you would like us to include your company’s name and/or logo in the README 
 - [DNX](https://www.dnx.solutions/) [[@DNXLabs](https://github.com/DNXLabs)]
 - [Fortescue Future Industries](https://ffi.com.au/) [[@spencervoorend](https://github.com/spencervoorend)]
 - [Funcional Health Tech](https://www.funcionalcorp.com.br/) [[@webysther](https://github.com/webysther)]
+- [Funding Circle](https://www.fundingcircle.com/) [[@pfig](https://github.com/pfig)]
 - [Infomach](https://www.infomach.com.br/)
 - [Informa Markets](https://www.informamarkets.com/en/home.html) [[@mateusmorato]](http://github.com/mateusmorato)
 - [LINE TV](https://www.linetv.tw/) [[@bryanyang0528](https://github.com/bryanyang0528)]

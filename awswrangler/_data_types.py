@@ -366,6 +366,8 @@ def athena2pandas(dtype: str) -> str:  # pylint: disable=too-many-branches,too-m
             return "geometry"
         except ImportError:
             pass
+    if dtype in ("array", "row", "map"):
+        return "object"
     raise exceptions.UnsupportedType(f"Unsupported Athena type: {dtype}")
 
 

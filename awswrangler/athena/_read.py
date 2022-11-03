@@ -108,12 +108,18 @@ def _fetch_parquet_result(
     if not paths:
         if not temp_table_fqn:
             raise exceptions.EmptyDataFrame("Query would return untyped, empty dataframe.")
+
         database, temp_table_name = map(lambda x: x.replace('"', ""), temp_table_fqn.split("."))
         dtype_dict = catalog.get_table_types(database=database, table=temp_table_name, boto3_session=boto3_session)
         df = pd.DataFrame(columns=list(dtype_dict.keys()))
         df = cast_pandas_with_athena_types(df=df, dtype=dtype_dict)
         df = _apply_query_metadata(df=df, query_metadata=query_metadata)
+
+        if chunked:
+            return (df,)
+
         return df
+
     ret = s3.read_parquet(
         path=paths,
         use_threads=use_threads,
@@ -686,11 +692,11 @@ def read_sql_query(
 
     **Related tutorial:**
 
-    - `Amazon Athena <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Amazon Athena <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/006%20-%20Amazon%20Athena.html>`_
-    - `Athena Cache <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Athena Cache <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/019%20-%20Athena%20Cache.html>`_
-    - `Global Configurations <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Global Configurations <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/021%20-%20Global%20Configurations.html>`_
 
     **There are three approaches available through ctas_approach and unload_approach parameters:**
@@ -754,7 +760,7 @@ def read_sql_query(
     /athena.html#Athena.Client.get_query_execution>`_ .
 
     For a practical example check out the
-    `related tutorial <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    `related tutorial <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
     tutorials/024%20-%20Athena%20Query%20Metadata.html>`_!
 
 
@@ -974,6 +980,8 @@ def read_sql_table(
     table: str,
     database: str,
     ctas_approach: bool = True,
+    unload_approach: bool = False,
+    unload_parameters: Optional[Dict[str, Any]] = None,
     categories: Optional[List[str]] = None,
     chunksize: Optional[Union[int, bool]] = None,
     s3_output: Optional[str] = None,
@@ -998,11 +1006,11 @@ def read_sql_table(
 
     **Related tutorial:**
 
-    - `Amazon Athena <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Amazon Athena <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/006%20-%20Amazon%20Athena.html>`_
-    - `Athena Cache <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Athena Cache <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/019%20-%20Athena%20Cache.html>`_
-    - `Global Configurations <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    - `Global Configurations <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
       tutorials/021%20-%20Global%20Configurations.html>`_
 
     **There are two approaches to be defined through ctas_approach parameter:**
@@ -1047,7 +1055,7 @@ def read_sql_table(
     /athena.html#Athena.Client.get_query_execution>`_ .
 
     For a practical example check out the
-    `related tutorial <https://aws-sdk-pandas.readthedocs.io/en/2.16.1/
+    `related tutorial <https://aws-sdk-pandas.readthedocs.io/en/2.17.0/
     tutorials/024%20-%20Athena%20Query%20Metadata.html>`_!
 
 
@@ -1095,6 +1103,11 @@ def read_sql_table(
     ctas_approach: bool
         Wraps the query using a CTAS, and read the resulted parquet data on S3.
         If false, read the regular CSV on S3.
+    unload_approach: bool
+        Wraps the query using UNLOAD, and read the results from S3.
+        Only PARQUET format is supported.
+    unload_parameters : Optional[Dict[str, Any]]
+        Params of the UNLOAD such as format, compression, field_delimiter, and partitioned_by.
     categories: List[str], optional
         List of columns names that should be returned as pandas.Categorical.
         Recommended for memory restricted environments.
@@ -1182,6 +1195,8 @@ def read_sql_table(
         database=database,
         data_source=data_source,
         ctas_approach=ctas_approach,
+        unload_approach=unload_approach,
+        unload_parameters=unload_parameters,
         categories=categories,
         chunksize=chunksize,
         s3_output=s3_output,

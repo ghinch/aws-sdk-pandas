@@ -210,16 +210,6 @@ def _get_query_metadata(  # pylint: disable=too-many-statements
     col_name: str
     col_type: str
     for col_name, col_type in cols_types.items():
-        if col_type == "array":
-            raise exceptions.UnsupportedType(
-                "List data type is not supported with regular (non-CTAS and non-UNLOAD) queries. "
-                "Please use ctas_approach=True or unload_approach=True for List columns."
-            )
-        if col_type == "row":
-            raise exceptions.UnsupportedType(
-                "Struct data type is not supported with regular (non-CTAS and non-UNLOAD) queries. "
-                "Please use ctas_approach=True or unload_approach=True for Struct columns."
-            )
         pandas_type: str = _data_types.athena2pandas(dtype=col_type)
         if (categories is not None) and (col_name in categories):
             dtype[col_name] = "category"
@@ -1154,3 +1144,104 @@ def get_query_execution(query_execution_id: str, boto3_session: Optional[boto3.S
         QueryExecutionId=query_execution_id,
     )
     return cast(Dict[str, Any], response["QueryExecution"])
+
+
+def get_query_executions(
+    query_execution_ids: List[str], return_unprocessed: bool = False, boto3_session: Optional[boto3.Session] = None
+) -> Union[Tuple[pd.DataFrame, pd.DataFrame], pd.DataFrame]:
+    """From specified query execution IDs, return a DataFrame of query execution details.
+
+    https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.batch_get_query_execution
+
+    Parameters
+    ----------
+    query_execution_ids : List[str]
+        Athena query execution IDs.
+    return_unprocessed: bool.
+        True to also return query executions id that are unable to be processed.
+        False to only return DataFrame of query execution details.
+        Default is False
+    boto3_session : boto3.Session(), optional
+        Boto3 Session. The default boto3 session will be used if boto3_session receive None.
+
+    Returns
+    -------
+    DataFrame
+        DataFrame contain information about query execution details.
+
+    DataFrame
+        DataFrame contain information about unprocessed query execution ids.
+
+    Examples
+    --------
+    >>> import awswrangler as wr
+    >>> query_executions_df, unprocessed_query_executions_df = wr.athena.get_query_executions(
+            query_execution_ids=['query-execution-id','query-execution-id1']
+        )
+    """
+    chunked_size: int = 50
+    query_executions: List[Dict[str, Any]] = []
+    unprocessed_query_execution: List[Dict[str, str]] = []
+    client_athena: boto3.client = _utils.client(service_name="athena", session=boto3_session)
+    for i in range(0, len(query_execution_ids), chunked_size):
+        response = client_athena.batch_get_query_execution(QueryExecutionIds=query_execution_ids[i : i + chunked_size])
+        query_executions += response["QueryExecutions"]
+        unprocessed_query_execution += response["UnprocessedQueryExecutionIds"]
+    if unprocessed_query_execution and not return_unprocessed:
+        _logger.warning(
+            "Some of query execution ids are unable to be processed."
+            "Set return_unprocessed to True to get unprocessed query execution ids"
+        )
+    if return_unprocessed:
+        return pd.json_normalize(query_executions), pd.json_normalize(unprocessed_query_execution)
+    return pd.json_normalize(query_executions)
+
+
+def list_query_executions(workgroup: Optional[str] = None, boto3_session: Optional[boto3.Session] = None) -> List[str]:
+    """Fetch list query execution IDs ran in specified workgroup or primary work group if not specified.
+
+    https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/athena.html#Athena.Client.list_query_executions
+
+    Parameters
+    ----------
+    workgroup : str
+        The name of the workgroup from which the query_id are being returned.
+        If not specified, a list of available query execution IDs for the queries in the primary workgroup is returned.
+    boto3_session : boto3.Session(), optional
+        Boto3 Session. The default boto3 session will be used if boto3_session receive None.
+
+    Returns
+    -------
+    List[str]
+        List of query execution IDs.
+
+    Examples
+    --------
+    >>> import awswrangler as wr
+    >>> res = wr.athena.list_query_executions(workgroup='workgroup-name')
+
+    """
+    client_athena: boto3.client = _utils.client(service_name="athena", session=boto3_session)
+    kwargs: Dict[str, Any] = {"base": 1}
+    if workgroup:
+        kwargs["WorkGroup"] = workgroup
+    query_list: List[str] = []
+    response: Dict[str, Any] = _utils.try_it(
+        f=client_athena.list_query_executions,
+        ex=botocore.exceptions.ClientError,
+        ex_code="ThrottlingException",
+        max_num_tries=5,
+        **kwargs,
+    )
+    query_list += response["QueryExecutionIds"]
+    while "NextToken" in response:
+        kwargs["NextToken"] = response["NextToken"]
+        response = _utils.try_it(
+            f=client_athena.list_query_executions,
+            ex=botocore.exceptions.ClientError,
+            ex_code="ThrottlingException",
+            max_num_tries=5,
+            **kwargs,
+        )
+        query_list += response["QueryExecutionIds"]
+    return query_list
