@@ -31,6 +31,21 @@ _logger: logging.Logger = logging.getLogger(__name__)
 
 try:
     import geopandas as gpd # noqa
+
+    from geopandas.array import GeometryArray
+    from shapely.geometry import Polygon
+
+    # start with
+    # 'POLYGON ((-0.22625117066703537 50.84245208445742, -0.2261742455057821 50.84247294877771, -0.22607679854341492 50.842499346738414, -0.22603798372337433 50.84250970154573, -0.2258363255425657 50.84258166705967, -0.2257740795127092 50.84251884635352, -0.22597091829050311 50.84245223066492, -0.2262070484623499 50.8423870213493, -0.22625117066703537 50.84245208445742))']
+    def geopandas_from_sequence_of_strings(cls, strings, dtype, copy: bool = False):
+        def parse_dtype(s):
+            if s.startswith("POLYGON"):
+                return Polygon
+        def parse_coords(s):
+            return [list(map(float, c.split(' '))) for c in s.split(' ', 1)[1][2:-2].split(', ')]
+        return cls._from_sequence([parse_dtype(s)(parse_coords(s)) for s in strings], dtype=dtype, copy=copy)
+
+    GeometryArray._from_sequence_of_strings = classmethod(geopandas_from_sequence_of_strings)
 except ImportError:
     pass
 
